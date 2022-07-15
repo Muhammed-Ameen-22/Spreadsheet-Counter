@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
+import axios from 'axios';
 import LockIcon from '@mui/icons-material/Lock';
 import PersonPinIcon from '@mui/icons-material/PersonPin';
 import '../index.css'
+
 function Login(){
     const [userName,setUserName]=useState('');
     const [password,setPassword]=useState('');
@@ -12,19 +14,43 @@ function Login(){
 
     const handleUserName=(e)=>
     {
-        setUserName(e.target.value)
-        if(format.test(userName))
-        setErrorMessage("Username should not contain special characters")
-        else
-        setErrorMessage('')
+      setUserName(e.target.value)
+          
+      //checking whether username contains any special characters
+
+      if(format.test(userName))
+      setErrorMessage("Username should not contain special characters")
+      else
+      setErrorMessage('')
     }
 
 
-    const handleSubmit=(e)=>{
+    const handleSubmit=async(e)=>
+    
+    {
 
         e.preventDefault();
-    if(format.test(userName))
-    setErrorMessage("Username should not contain special characters")
+        try{
+          const res= await axios.post(process.env.REACT_APP_SERVER_URL+"/api/login",
+          {userName,password},{ withCredentials: true } )
+          .then((response)=>
+          {
+          console.log('response',response)
+          window.location.replace('/Subscriptions')
+          
+          })
+          .catch((err,response)=>{
+            // console.log('Error',err.response.data.Reason)
+            setErrorMessage(err.response.data.Reason)
+          })
+      }
+  
+      catch(err)
+      {
+          console.log('ERROR',err)
+      }
+        
+    
 
     }
     useEffect=(()=>{

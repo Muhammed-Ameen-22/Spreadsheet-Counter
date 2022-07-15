@@ -1,8 +1,14 @@
 import Button from '@mui/material/Button';
+import axios from 'axios';
 import { Link } from 'react-router-dom';
 
 function Navbar() {
-
+  const handleLogout=async()=>
+  {
+    const res= await axios.post(process.env.REACT_APP_SERVER_URL+'/api/logout')
+    return res && window.location.replace("/login");
+  }
+  
   return (
     <>
       <nav className='navbar'>
@@ -23,16 +29,16 @@ function Navbar() {
                 Dashboard
               </Link>
             </li>
-            <li className='nav-item'>
+            {/* <li className='nav-item'>
               <Link
                 to='/Login'
                 className='nav-links'
               >
                 Logout
               </Link>
-            </li>
+            </li> */}
           </ul>
-          {/* <Button buttonStyle='btn--outline' >Log Out</Button> */}
+          <Button buttonStyle='btn--outline' onClick={handleLogout}>Log Out</Button>
       </nav>
     </>
   );

@@ -7,6 +7,8 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import axios from "axios";
+
 // import Fade from 'react-reveal/Fade';
 import '../index.css'
 
@@ -16,57 +18,93 @@ function SignUp(){
     const [confirmPassword,setConfirmPassword]=useState('');
     const [errorMessage,setErrorMessage]=useState('')
 
-    const [open, setOpen] = useState(false);
+    const [openDialog, setOpenDialog] = useState(false);
 
    const handleOk=()=>
    {
     window.location.replace('/Login')
    }
     const handleClose = () => {
-      setOpen(false);
+      setOpenDialog(false);
     };
 
-    var format = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
+    var format = /[!#$%^&*()+\-=\[\]{};':"\\|,.<>\/?]+/;
 
     const handleUserName=(e)=>
+       {
+ 
+          setUserName(e.target.value)
+          
+          //checking whether username contains any special characters
+
+          if(format.test(userName))
+          setErrorMessage("Username should not contain special characters")
+          else
+          setErrorMessage('')
+        }
+
+
+    const handleSubmit=async(e)=>
+    
     {
-        setUserName(e.target.value)
+          if(!userName || !password || !confirmPassword)
 
-        //checking whether username contains any special characters
+          {
+            setErrorMessage('Field should not be blank')
+          }
+ 
+          else if(userName && password && confirmPassword)
 
-        if(format.test(userName))
-        setErrorMessage("Username should not contain special characters")
-        else
-        setErrorMessage('')
-    }
+          {
 
+              e.preventDefault();
 
-    const handleSubmit=(e)=>{
-    console.log(password.length)
-        e.preventDefault();
-    // if(format.test(userName))
-    // setErrorMessage("Username should not contain special characters")
+              if(password.length < 6)
 
-    if(password.length < 6)
-        setErrorMessage("Password must be greater than 6 characters")
+                  setErrorMessage("Password must be greater than 6 characters")
 
-    else{
+              else
+              
+              {
 
-         if(password !== confirmPassword)
-            setErrorMessage("Password do not match")
+                  if(password !== confirmPassword)
+                      setErrorMessage("Password do not match")
 
-        else if(password === confirmPassword)
-        {
-            setErrorMessage("")
-            setOpen(true)
-            
+                  else if(password === confirmPassword)
+                  {
+                      setErrorMessage("")
+                      
+                      //sendind data to backend
+                      try{
+                        const res= await axios.post(process.env.REACT_APP_SERVER_URL+"/api/register",
+                        {userName,password},{ withCredentials: true } )
+                        .then((response)=>
+                        {
+                        console.log(response)
+                        setOpenDialog(true)
+                        })
+                        .catch((err,response)=>{
+                          // console.log('Error',err.response.data.Reason)
+                          setErrorMessage(err.response.data.Reason)
+                        })
+                    }
+                
+                    catch(err)
+                    {
+                        console.log('ERROR',err)
+                    }
+                      
+                  }
+              }
+          
+              
+               
+              
+          
         }
     }
-    }
 
-    // useEffect=(()=>{
-    // },[]
-    // );
+    
     
 return(
 
@@ -105,7 +143,7 @@ return(
 
     
     <Dialog
-        open={open}
+        open={openDialog}
         onClose={handleClose}
       >
         
@@ -113,6 +151,7 @@ return(
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
+          
           Registration successful, login to continue
           </DialogContentText>
         </DialogContent>
