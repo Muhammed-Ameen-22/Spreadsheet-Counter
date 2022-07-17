@@ -1,9 +1,10 @@
 import express from 'express';
-import {subscribe,fetchSignedInEmails} from '../controllers/Dashboard.js'
+import {subscribe,fetchSignedInEmails} from '../controllers/Subscription.js'
 import { isLoggedIn } from '../middlewares/isLoggedIn.js';
 
 const router = express.Router();
 
 router.post('/subscribe', isLoggedIn,subscribe);
-router.post('/fetchSignedInEmails',isLoggedIn,fetchSignedInEmails)
+router.get('/fetchSignedInEmails',isLoggedIn,fetchSignedInEmails)
+// router.post('/readDrive',readDrive);
 export default router;

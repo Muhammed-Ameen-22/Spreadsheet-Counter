@@ -9,7 +9,7 @@ const SubscriptionSchema= new Schema({
         ref: 'User'
         }
       ],
-      
+
       email:{
         type: String,
         min: 6,
@@ -25,4 +25,4 @@ const SubscriptionSchema= new Schema({
      
 });
 
-export default mongoose.model('Subscriptions', SubscriptionSchema);
+export default mongoose.model('Subscription', SubscriptionSchema);
