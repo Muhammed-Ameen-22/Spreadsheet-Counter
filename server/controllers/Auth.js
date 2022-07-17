@@ -55,6 +55,8 @@ export const login =async(req,res)=>{
         //checking whether user exist
 
         const user=await User.findOne({ userName : userName });
+
+        const userId=user.id;
         
         if(!user)
         {
@@ -78,7 +80,7 @@ export const login =async(req,res)=>{
 
         //jwt initialization
         const token = jwt.sign(
-            {userName},
+            {userName, userId},
             process.env.JWT_SECRET,
             {
               expiresIn: '25 days',

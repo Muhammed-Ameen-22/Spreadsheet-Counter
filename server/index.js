@@ -3,7 +3,11 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import db from './config/db.js';
 import authRoutes from './routes/auth.js';
+import dashboardRoutes from './routes/Dashboard.js'
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
+import bodyParser from "body-parser";
+
 
 dotenv.config();
 const app = express();
@@ -11,8 +15,9 @@ const port = process.env.SERVER_PORT || 8089;
 // console.log('PORT',port)
 
 //middleware
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookieParser());
 app.use(
     cors({
         origin: ["http://localhost:3000"],
@@ -21,7 +26,12 @@ app.use(
     })
 );
 
+
+
+
 app.use('/api',authRoutes);
+app.use('/api',dashboardRoutes);
+
 
 
 app.listen(port,()=>{
