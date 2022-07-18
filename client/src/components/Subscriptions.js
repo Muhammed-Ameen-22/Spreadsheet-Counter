@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState} from 'react';
+import { useNavigate } from "react-router-dom"; 
 import Navbar from './Navbar'
 import { gapi } from 'gapi-script';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
@@ -13,31 +14,25 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
 import Button from '@mui/material/Button';
 import axios from 'axios';
 
 
 function Subscriptions() {
 
+let navigate =useNavigate();
+  // useEffect(() => {
 
+  //   // fetchSignedInEmails();
+  //   getAuthURL();
+  // }, []);
+
+  const scopes= ['https://www.googleapis.com/auth/drive','https://www.googleapis.com/auth/userinfo.email'];
+
+  const[url,setUrl]=useState('')
   useEffect(() => {
     fetchSignedInEmails();
-
-  }, []);
-
-
-  useEffect(() => {
-    function start() {
-      gapi.client.init({
-        clientId: process.env.GOOGLE_CLIENT_ID,
-        scope: 'email',
-      },
-      );
-    }
-
-    gapi.load('client:auth2', start);
-    fetchSignedInEmails();
+    
   }, []);
 
   const handleOk = () => {
@@ -45,6 +40,24 @@ function Subscriptions() {
   };
   const [email, setEmail] = useState('')
   const [openDialog,setOpenDialog]=useState(false)
+
+
+  const getAuthURL = async(response)=>{
+    console.log('getAuth')
+    let res= await fetch(process.env.REACT_APP_SERVER_URL + "/api/getoAuthurl", {
+      credentials: 'include'
+    })
+     .then(async (response)=>{
+      console.log('respo',await response.text())  
+      setUrl(await response.text());
+     })
+     .catch((err)=>{
+      console.log('err',err)
+     })
+      
+    
+  }
+
 
   const responseSuccessGoogle = async (response) => {
     console.log('success', response)
@@ -74,6 +87,19 @@ function Subscriptions() {
     console.log('failure', response);
   }
 
+  const  redirectURL=(email)=>{
+    console.log('email',email)
+
+    navigate('/dashboard',{state:{id:1,name:email}});
+
+
+    // history.push({
+    //   pathname: '/dashboard',
+    //   // search: '?query=abc',
+    //   state: { detail: email }
+    // });
+    // window.location.replace('/dashboard')
+  }
 
   const [signedEmails, setSignedEmails] = useState([]);
 
@@ -88,7 +114,7 @@ function Subscriptions() {
     console.log("this is res", resp);
 
     setSignedEmails(resp)
-    console.log('signed Emails',signedEmails.length)
+    console.log('signed Emails',signedEmails)
 
 
   }
@@ -98,7 +124,7 @@ function Subscriptions() {
 
     <>
 
-      <div style={{ marginLeft: '350px' }}>
+      <div style={{ marginLeft: '350px' }} onClick={() => {redirectURL(card.email)}}>
       
         <Fade left>
 
@@ -107,9 +133,9 @@ function Subscriptions() {
               <Typography sx={{ fontSize: 20, color: '#000000', position: 'absolute', margin: '-2px 0px 0px 30px' }} >
                 {card.email}
               </Typography>
-              <IconButton>
-                <ArrowForwardIosIcon sx={{ margin: '20px 0px 0px 215px', fontSize: 100 }} />
-              </IconButton>
+              {/* <IconButton >
+                <ArrowForwardIosIcon sx={{ margin: '-5px 0px 0px 457px', fontSize: 20 }} />
+              </IconButton> */}
             </CardContent>
           </Card>
         </Fade>
@@ -127,13 +153,10 @@ function Subscriptions() {
          {(signedEmails.length === 0) ? <h3 style={{ display: 'flex', margin: '62px 0px 0px 105px' }}><HighlightOffIcon />No Subscriptions added, click below to add your first subscription</h3>:<></>} 
           
         <div style={{ display: 'flex', margin: '18px 0px 0px 100px ' }}>
-          <GoogleLogin
-            buttonText="Add Subscription"
-            clientId='44825773041-q3f4993iapufebr6av6fepgnbjn2e6do.apps.googleusercontent.com'
-            onSuccess={responseSuccessGoogle}
-            onFailure={responseFailureGoogle}
-            // theme:dark
-            cookiePolicy={'single_host_origin'} />
+
+    <Button href='https://accounts.google.com/o/oauth2/v2/auth?access_type=offline&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fdrive%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email&response_type=code&client_id=44825773041-q3f4993iapufebr6av6fepgnbjn2e6do.apps.googleusercontent.com&redirect_uri=http%3A%2F%2Flocalhost%3A8000%2Fapi%2Fauthenticate'>Subscribe</Button>
+
+          
         </div>
 
       <div className="grid" 

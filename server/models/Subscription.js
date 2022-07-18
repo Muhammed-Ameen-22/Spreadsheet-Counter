@@ -3,12 +3,16 @@ const Schema=mongoose.Schema;
 
 const SubscriptionSchema= new Schema({
 
-      userId:[
-        {
-        type: Schema.Types.ObjectId, 
-        ref: 'User'
-        }
-      ],
+      // userId:[
+      //   {
+      //   type: Schema.Types.ObjectId, 
+      //   ref: 'User'
+      //   }
+      // ],
+
+      userId : {
+        type: String
+      },
 
       email:{
         type: String,
@@ -17,10 +21,7 @@ const SubscriptionSchema= new Schema({
     
       },
       tokenId:{
-        type: String,
-        min: 6,
-        max: 20,
-    
+        type: Object
       }
      
 });

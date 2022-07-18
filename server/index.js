@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import db from './config/db.js';
 import authRoutes from './routes/auth.js';
 import dashboardRoutes from './routes/Dashboard.js'
+import subscriptionRoutes from './routes/Subscriptons.js';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import bodyParser from "body-parser";
@@ -31,7 +32,7 @@ app.use(
 
 app.use('/api',authRoutes);
 app.use('/api',dashboardRoutes);
-
+app.use('/api',subscriptionRoutes);
 
 
 app.listen(port,()=>{
