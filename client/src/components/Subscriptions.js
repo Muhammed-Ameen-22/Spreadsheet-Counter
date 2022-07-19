@@ -33,6 +33,7 @@ let navigate =useNavigate();
   useEffect(() => {
     fetchSignedInEmails();
     
+    
   }, []);
 
   const handleOk = () => {
@@ -108,6 +109,11 @@ let navigate =useNavigate();
     let resp = await fetch(process.env.REACT_APP_SERVER_URL + "/api/fetchSignedInEmails", {
       credentials: 'include'
     })
+    
+    if(!resp.isLoggedIn)
+    {
+      window.location.replace('/login')
+    }
 
     resp = await resp.json();
 

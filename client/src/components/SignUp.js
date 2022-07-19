@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import {useState } from 'react';
 import LockIcon from '@mui/icons-material/Lock';
 import PersonPinIcon from '@mui/icons-material/PersonPin';
 import Button from '@mui/material/Button';
@@ -129,10 +129,14 @@ return(
           </div>
 
          
-          
+
 
           <input type="submit" value="Sign up" onClick={handleSubmit} class="btn solid" />
            <h3 style={{color:"red", fontSize:"13px"}}>{errorMessage}</h3>
+           <h3 style={{color:"blue", fontSize:"12px", marginTop : 15}}>Already have an account  ?   <a style={
+            {color:'blue'}
+           } href='/login'>Sign in</a></h3>
+           
         </form>
       </div>
       

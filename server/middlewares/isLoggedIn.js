@@ -9,7 +9,8 @@ export const isLoggedIn = (req, res, next) => {
         console.log('isLogg2',req.cookies)
         console.log('isLogg3',req.cookies.token)
         const response = { "Status": "Failure", "Reason": "Please login first" }
-        return res.status(400).send(response)
+        return res.json({ isLoggedIn: false });
+        // return res.status(400).send(response)
     }
     try {
  

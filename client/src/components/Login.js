@@ -80,6 +80,10 @@ return(
           
 
           <input type="submit" value="Login" onClick={handleSubmit} class="btn solid" />
+
+          <h3 style={{color:"blue", fontSize:"12px", marginTop : 15}}>Don't have an account  ?   <a style={
+            {color:'blue'}
+           } href='/subscriptions'>Sign up</a></h3>
           
         </form>
       </div>

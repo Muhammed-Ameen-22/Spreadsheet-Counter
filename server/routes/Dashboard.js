@@ -5,6 +5,6 @@ import { isLoggedIn } from '../middlewares/isLoggedIn.js';
 
 const router = express.Router();
 
-router.post('/populatedashboard',populateDashboard);
+router.post('/populatedashboard',isLoggedIn,populateDashboard);
 
 export default router;
