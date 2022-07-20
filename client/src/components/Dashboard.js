@@ -17,9 +17,9 @@ function Dashboard()
 {
   const location=useLocation();
   useEffect(() => {
-
+  
     fetchSheets();
-  }, [location.state.detail]);
+  }, []);
 
   
   console.log('loc.state',location.state.id)
@@ -38,13 +38,17 @@ function Dashboard()
       let resp = await axios.post(process.env.REACT_APP_SERVER_URL + "/api/populatedashboard", {email_id},
       { withCredentials: true })
       
-     
+      if(resp.data === null)
+      {
+        window.location.replace('/subscriptions')
+      }
       // resp = await resp.json();
       
 
       console.log("this is res", resp.data);
       setSheets(resp.data)
-
+      resp = await resp.json();
+      console.log('after setsheet',resp)
     
 
     }

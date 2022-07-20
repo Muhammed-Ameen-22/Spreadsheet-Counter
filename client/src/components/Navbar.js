@@ -31,7 +31,7 @@ function Navbar() {
               </Link>
             </li>
             <li className='nav-links'>
-             <Button buttonStyle='btn--outline' onClick={handleLogout}>Log Out</Button>
+             <Button sx={{color:'white'}} variant="contained" onClick={handleLogout}>Log Out</Button>
             </li>
           </ul>
           

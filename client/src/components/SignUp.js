@@ -22,7 +22,7 @@ function SignUp(){
 
    const handleOk=()=>
    {
-    window.location.replace('/Login')
+    window.location.replace('/login')
    }
     const handleClose = () => {
       setOpenDialog(false);

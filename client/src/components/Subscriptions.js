@@ -30,11 +30,11 @@ let navigate =useNavigate();
   const scopes= ['https://www.googleapis.com/auth/drive','https://www.googleapis.com/auth/userinfo.email'];
 
   const[url,setUrl]=useState('')
+  const [signedEmails, setSignedEmails] = useState([]);
+
   useEffect(() => {
     fetchSignedInEmails();
-    
-    
-  }, []);
+  }, [signedEmails]);
 
   const handleOk = () => {
     setOpenDialog(false);
@@ -102,25 +102,25 @@ let navigate =useNavigate();
     // window.location.replace('/dashboard')
   }
 
-  const [signedEmails, setSignedEmails] = useState([]);
+
 
   const fetchSignedInEmails = async (response) => {
 
     let resp = await fetch(process.env.REACT_APP_SERVER_URL + "/api/fetchSignedInEmails", {
       credentials: 'include'
     })
-    
-    if(!resp.isLoggedIn)
+  
+    resp = await resp.json();
+
+      
+    if(resp.isLoggedIn === false)
     {
       window.location.replace('/login')
     }
-
-    resp = await resp.json();
-
-    console.log("this is res", resp);
+    // console.log("this is res", resp);
 
     setSignedEmails(resp)
-    console.log('signed Emails',signedEmails)
+    // console.log('signed Emails',signedEmails)
 
 
   }
@@ -160,7 +160,7 @@ let navigate =useNavigate();
           
         <div style={{ display: 'flex', margin: '18px 0px 0px 100px ' }}>
 
-    <Button href='https://accounts.google.com/o/oauth2/v2/auth?access_type=offline&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fdrive%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email&response_type=code&client_id=44825773041-q3f4993iapufebr6av6fepgnbjn2e6do.apps.googleusercontent.com&redirect_uri=http%3A%2F%2Flocalhost%3A8000%2Fapi%2Fauthenticate'>Subscribe</Button>
+    <Button variant='contained' href='https://accounts.google.com/o/oauth2/v2/auth?access_type=offline&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fdrive%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email&response_type=code&client_id=44825773041-q3f4993iapufebr6av6fepgnbjn2e6do.apps.googleusercontent.com&redirect_uri=http%3A%2F%2Flocalhost%3A8000%2Fapi%2Fauthenticate'>Subscribe</Button>
 
           
         </div>

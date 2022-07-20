@@ -36,7 +36,7 @@ function Login(){
           .then((response)=>
           {
           console.log('response',response)
-          window.location.replace('/Subscriptions')
+          window.location.replace('/subscriptions')
           
           })
           .catch((err,response)=>{
@@ -83,7 +83,7 @@ return(
 
           <h3 style={{color:"blue", fontSize:"12px", marginTop : 15}}>Don't have an account  ?   <a style={
             {color:'blue'}
-           } href='/subscriptions'>Sign up</a></h3>
+           } href='/signup'>Sign up</a></h3>
           
         </form>
       </div>
