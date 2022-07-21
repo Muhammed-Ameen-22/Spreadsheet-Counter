@@ -58,7 +58,7 @@ export const getAccessToken = async (req,res)=>{
 
 export const authenticateToken = async (req, res) => {
 
-    console.log("req inside auth",req.query.code);
+    // console.log("req inside auth",req.query.code);
     
     if(req.query.code == null) return res.status(400).send("Invalid Request")
     oAuth2Client.getToken(req.query.code, (err, token) => {
@@ -155,12 +155,12 @@ export const authenticateToken = async (req, res) => {
 
 export const fetchSignedInEmails = async (req, res) => {
 
-    console.log('reached fetchSignedInEmails')
+    // console.log('reached fetchSignedInEmails')
     try {
 
 
         //check if user has entry in subscription table
-        console.log('user id', req.user.userId)
+        // console.log('user id', req.user.userId)
         Subscription.find({ userId: req.user.userId }, function (err, data) {
 
             if (data) {

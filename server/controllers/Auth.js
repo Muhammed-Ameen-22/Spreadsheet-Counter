@@ -56,7 +56,7 @@ export const login =async(req,res)=>{
 
         const user=await User.findOne({ userName : userName });
 
-        const userId=user.id;
+        
         
         if(!user)
         {
@@ -67,8 +67,8 @@ export const login =async(req,res)=>{
 
         //checking password entered is same or not
         
-        const validPassword= bcrypt.compare(password,user.password)
-     
+        const validPassword= await bcrypt.compare(password,user.password)
+        console.log('valid pass',validPassword)
 
         if(!validPassword)
         {
@@ -76,8 +76,9 @@ export const login =async(req,res)=>{
             const response = { "Status": "Failure", "Reason": "Invalid Password" }
             return res.status(400).send(response) 
         }
+        
         console.log('Successful')
-
+        const userId=user.id;
         //jwt initialization
         const token = jwt.sign(
             {userName, userId},

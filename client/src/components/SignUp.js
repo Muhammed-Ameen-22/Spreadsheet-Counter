@@ -61,7 +61,7 @@ function SignUp(){
 
               if(password.length < 6)
 
-                  setErrorMessage("Password must be greater than 6 characters")
+                  setErrorMessage("Password must be greater than 5 characters")
 
               else
               
