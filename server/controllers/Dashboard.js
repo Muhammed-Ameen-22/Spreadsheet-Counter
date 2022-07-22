@@ -24,6 +24,26 @@ export const populateDashboard = async (req, res) => {
     // console.log('user instance',userInstance )
     const tokenId = userInstance.tokenId; 
     oAuth2Client.setCredentials(tokenId);
+
+    
+    // //setting a new jwt token for the access token
+
+    // const auth_access_token = jwt.sign(
+    //   {tokenId},
+    //   process.env.JWT_SECRET,
+    //   {
+    //     expiresIn: '25 days',
+    //   }
+    // );
+  
+    // res.cookie('auth_access_token', token, {
+    //   httpOnly: true,
+    //   maxAge: 2160000000,
+    //   secure: process.env.ENV == 'production' ? true : false,
+    // });
+
+
+
     
     const files = await getSheetsFromDrive(oAuth2Client)
     console.log('files user', files)
@@ -144,25 +164,41 @@ const getSheetsFromDrive = async (auth) => {
    
 }
 
-  function getDataFromSpreadsheetById(){
-    const sheets = google.sheets({ version: 'v4', auth });
-    sheets.spreadsheets.values.get({
-      spreadsheetId: files[0].id,
-      range: 'Sheet1!1:1',
-    }, (err, res) => {
-      if (err) return console.log('The API returned an error: ' + err);
-      const rows = res.data.values;
-      if (rows.length) {
-        console.log('Name, Major:');
-        // Print columns A and E, which correspond to indices 0 and 4.
-        rows.map((row) => {
-          console.log(`${row}`);
-        });
-      } else {
-        console.log('No data found.');
-      }
-    });
+ export const getDataFromSpreadsheetById=async(req,res)=>{
 
+    let size=0;
+    const sheets = google.sheets({ version: 'v4', auth: oAuth2Client });
+    
+    console.log('req body',req.body)
+    
+  const userInstance = await Subscription.findOne({ email: req.body.email_id });
+  if (userInstance != null) {
+
+    // console.log('user instance',userInstance )
+    const tokenId = userInstance.tokenId; 
+    oAuth2Client.setCredentials(tokenId);
+  }
+
+    sheets.spreadsheets.values.get({
+      spreadsheetId: req.body.sheet_id,
+      range: req.body.selectedTab+'!1:1',
+    }, (err, resp) => {
+      if (err) return console.log('The API returned an error: ' + err);
+      const rows = resp.data.values;
+      // console.log('rows',rows,rows[0].filter(Boolean).length)
+      if (rows) {
+
+         size = rows[0].filter(Boolean).length;
+         return res.status(200).send(size.toString());
+        
+        
+      }
+      else{
+        return res.status(200).send(size.toString());
+      }
+    }
+    
+    );
 
   }
 
