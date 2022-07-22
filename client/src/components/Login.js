@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
 import LockIcon from '@mui/icons-material/Lock';
 import PersonPinIcon from '@mui/icons-material/PersonPin';
@@ -7,10 +7,9 @@ import '../index.css'
 function Login(){
     const [userName,setUserName]=useState('');
     const [password,setPassword]=useState('');
-    const [confirmPassword,setConfirmPassword]=useState('');
     const [errorMessage,setErrorMessage]=useState('')
 
-    var format = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
+    var invalidFormat = /[!#$%^&*()+\-=[\]{};':"\\|,.<>/?]+/;
 
     const handleUserName=(e)=>
     {
@@ -18,7 +17,7 @@ function Login(){
           
       //checking whether username contains any special characters
 
-      if(format.test(userName))
+      if(invalidFormat.test(userName))
       setErrorMessage("Username should not contain special characters")
       else
       setErrorMessage('')
@@ -53,9 +52,6 @@ function Login(){
     
 
     }
-    useEffect=(()=>{
-    },[]
-    );
     
 return(
 
@@ -83,7 +79,7 @@ return(
 
           <h3 style={{color:"blue", fontSize:"12px", marginTop : 15}}>Don't have an account  ?   <a style={
             {color:'blue'}
-           } href='/signup'>Sign up</a></h3>
+           } href='/'>Sign up</a></h3>
           
         </form>
       </div>

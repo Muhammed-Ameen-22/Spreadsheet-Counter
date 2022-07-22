@@ -8,8 +8,6 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import axios from "axios";
-
-// import Fade from 'react-reveal/Fade';
 import '../index.css'
 
 function SignUp(){
@@ -28,7 +26,7 @@ function SignUp(){
       setOpenDialog(false);
     };
 
-    var format = /[!#$%^&*()+\-=\[\]{};':"\\|,.<>\/?]+/;
+    var invalidFormat = /[!#$%^&*()+\-=[\]{};':"\\|,.<>/?]+/;
 
     const handleUserName=(e)=>
        {
@@ -37,7 +35,7 @@ function SignUp(){
           
           //checking whether username contains any special characters
 
-          if(format.test(userName))
+          if(invalidFormat.test(userName))
           setErrorMessage("Username should not contain special characters")
           else
           setErrorMessage('')

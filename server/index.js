@@ -1,5 +1,4 @@
 import express from 'express';
-import mongoose from "mongoose";
 import dotenv from "dotenv";
 import db from './config/db.js';
 import authRoutes from './routes/auth.js';
@@ -26,8 +25,6 @@ app.use(
         credentials: true,
     })
 );
-
-
 
 
 app.use('/api',authRoutes);

@@ -5,7 +5,7 @@ function Navbar() {
   const handleLogout=async()=>
   {
     
-    const res= await fetch(process.env.REACT_APP_SERVER_URL+'/api/logout',{  credentials: 'include' })
+    const res= await fetch(process.env.REACT_APP_SERVER_URL+'/api/logout',{ credentials: 'include' })
     
     return res && window.location.replace("/login");
   }
@@ -22,14 +22,7 @@ function Navbar() {
                 Subscriptions
               </Link>
             </li>
-            <li className='nav-item'>
-              <Link
-                to='/Dashboard'
-                className='nav-links'
-              >
-                Dashboard
-              </Link>
-            </li>
+            
             <li className='nav-links'>
              <Button sx={{color:'white'}} variant="contained" onClick={handleLogout}>Log Out</Button>
             </li>

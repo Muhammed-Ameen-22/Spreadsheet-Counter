@@ -3,13 +3,6 @@ const Schema=mongoose.Schema;
 
 const SubscriptionSchema= new Schema({
 
-      // userId:[
-      //   {
-      //   type: Schema.Types.ObjectId, 
-      //   ref: 'User'
-      //   }
-      // ],
-
       userId : {
         type: String
       },

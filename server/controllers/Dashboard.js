@@ -15,22 +15,6 @@ const oAuth2Client = new google.auth.OAuth2(
   REDIRECT_URI
 )
 
-
-
-
-
-/**
- * Create an OAuth2 client with the given credentials, and then execute the
- * given callback function.
- * @param {Object} credentials The authorization client credentials.
- * @param {function} callback The callback to call with the authorized client.
- */
-// function authorize(credentials, callback) {
-// const { client_secret, client_id, redirect_uris } = credentials.web;
-// const oAuth2Client = new google.auth.OAuth2(
-//     client_id, client_secret, redirect_uris[0]);
-
-
 export const populateDashboard = async (req, res) => {
   // check in the db for accesstoken
   console.log('email id',req.body)
@@ -51,11 +35,7 @@ export const populateDashboard = async (req, res) => {
     return res.status(400).send(response)
   }
 
-
-
-
 }
-
 
 // function getSheetsFromDrive(auth) {
 
@@ -113,10 +93,6 @@ export const populateDashboard = async (req, res) => {
 // }
 
 
-
-
-
-
 const getSheetsFromDrive = async (auth) => {
 
   const drive = google.drive({ version: 'v3', auth });
@@ -138,17 +114,11 @@ const getSheetsFromDrive = async (auth) => {
 
     if (files.length) {
 
-      console.log('Files:', typeof (files));
+      // console.log('Files:', typeof (files));
 
       await Promise.all(files.map(async (file) => {
         console.log(`${file.name} (${file.id})`);
         const sheet_data = await api.spreadsheets.get({ spreadsheetId: file.id });
-
-        // (await api.spreadsheets.get({spreadsheetId: file.id})).data.sheets
-        //     .map((sheet) =>{ 
-        //       console.log("sheet name:",sheet.properties.title)
-        //       file.sheet=sheet.properties.title
-        // }  );
 
         console.log("inside file map");
         let sheetNames = [];
@@ -161,17 +131,7 @@ const getSheetsFromDrive = async (auth) => {
         
       }));
 
-      console.log("before return", files);
-
-      //   .filter(sheet => console.log("sheet name:",sheet.properties.title))
-
-      // });
-
-      // .map((file) => {
-      //           console.log(`${file.name} (${file.id})`);
-      //         });
-
-      // return res.data.files;
+      // console.log("before return", files);
       return files;
 
     } else {
@@ -181,7 +141,7 @@ const getSheetsFromDrive = async (auth) => {
   }  catch (err) {
     console.log('The API returned an error: ' + err);
   };
-    //get the sheet data with the spreadsheet id
+   
 }
 
   function getDataFromSpreadsheetById(){
