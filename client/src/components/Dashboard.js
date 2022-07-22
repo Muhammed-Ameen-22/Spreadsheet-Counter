@@ -1,4 +1,4 @@
-import {useEffect,useState,useMemo} from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import Navbar from './Navbar'
 import axios from 'axios';
 import Box from '@mui/material/Box';
@@ -11,147 +11,133 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import { useNavigate } from "react-router-dom";
 import Dropdown from 'react-dropdown';
-import {useLocation} from 'react-router-dom'; 
+import { useLocation } from 'react-router-dom';
 
-function Dashboard()
-{
-  const location=useLocation();
+function Dashboard() {
+
+
   useEffect(() => {
-  
     fetchSheets();
   }, []);
 
-  
-  console.log('loc.state',location.state.id)
-  console.log('loc.state',location.state.name)
+  const location = useLocation();
+  // console.log('loc.state',location.state.name)
 
-    const [open, setOpen] = useState(false);
-    const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
-    const [age, setAge] = useState('');
+  const [sheet, setSheet] = useState('')
+  const [tab, setTab] = useState('')
+  const [fetchedSheets, setFetchedSheets] = useState([])
+  const [tabs, setTabs] = useState([])
 
-    const [sheets,setSheets]=useState([])
-    const fetchSheets = async (response) => {
-      console.log('email in fetchsheets',location.state.name)
-      const email_id = location.state.name;
-      console.log('email in fetchsheets2',email_id)
-      let resp = await axios.post(process.env.REACT_APP_SERVER_URL + "/api/populatedashboard", {email_id},
+  const fetchSheets = async (response) => {
+
+    console.log('email in fetchsheets', location.state.name)
+    const email_id = location.state.name;
+    console.log('email in fetchsheets2', email_id)
+    let resp = await axios.post(process.env.REACT_APP_SERVER_URL + "/api/populatedashboard", { email_id },
       { withCredentials: true })
-      
-      if(resp.data === null)
-      {
-        window.location.replace('/subscriptions')
-      }
-      // resp = await resp.json();
-      
 
-      console.log("this is res", resp.data);
-      setSheets(resp.data)
-      resp = await resp.json();
-      console.log('after setsheet',resp)
-    
-
+    if (resp.data === null) {
+      window.location.replace('/subscriptions')
     }
-    const handleMakeChange = (event) => (
-      setMake(event.target.value)
-  );
-  const [make, setMake] = useState('');
-  const [model, setModel] = useState('');
-  const handleModelChange = (event) => (
-    setModel(event.target.value)
-);
+    // resp = await resp.json();
 
-    const sheetNames = useMemo(() => {
-      const modelsValues = {};
-      (sheets).forEach(({ name, sheetNames }) => {
-        modelsValues[name] = sheetNames;
-      })
+    // console.log("values in object", Object.values(resp.data));
+    setFetchedSheets(resp.data);
+
+    // console.log('after setsheet', resp)
+
+  }
+
+  var select = {};
+
+  (fetchedSheets).map((x) => {
+    select[x.name] = x.sheetNames;
+  })
+
+  console.log('select', select)
+
+  const sheetList = Object.keys(select).map(key => ({
+    name: key
     
-     return modelsValues;
-    })
-    const handleChange = (e) => {
-      setAge(e.target.value);
-    };
-                           
-    const  renderDropDown = (card, index) => {
-    return(
+  }));
+
+  console.log('sheetlist', sheetList)
+
+
+  const[sheetData,setSheetData]=useState([])
+
+
+  const[selectedSheet,setSelectedSheet]=useState('') 
+  const[selectedTab,setSelectedTab]=useState('')
+  const handleChangeSheet = (e) => {
+
+    const sheetSelected = e.target.value;
+    const tabSelected = sheetSelected !== "" ? select[sheetSelected] : [];
+    setSelectedSheet(sheetSelected)
+    setTabs(tabSelected)
+    setSelectedTab('');
+  };
+
+  const handleChangeTab = (e) => {
+    const tabSelected=e.target.value;
+    setSelectedTab(tabSelected);
+  };
+
+
+  return (
     <>
 
-{/* 
-{make && <FormControl variant="outlined" >
-         <InputLabel id="demo-simple-select-outlined-label">Model</InputLabel>
-         <Select
-             labelId="demo-simple-select-outlined-label"
-             id="demo-simple-select-outlined"
-             value={model}
-             onChange={handleModelChange}
-             label="Model"
-         >
-             <MenuItem value="">
-                 <em>Choose a Model</em>
-             </MenuItem>
-             {sheetNames[make] 
-                 ? sheetNames[make].map((model, index) => (
-                     <MenuItem key={index} value={model.name}>{model.name}</MenuItem>
-                 ))
-                 : null
-             }
-    
+      <Navbar />
+      {/* <Box sx={{ maxWidth: 150, display: 'inline', gap: 15, width: 150 }}>
+        <form> */}
+        <div className='container' style={{margin:'60px 0px 0px 600px'}}>
+          <InputLabel id="select-sheet-label">Sheet</InputLabel>
+          <Select sx={{width:150}}
+            labelId="select-sheet-label"
+            id="select-sheet"
+            value={selectedSheet}
+            label="Sheet"
+            onChange={e=>handleChangeSheet(e)}
+          >
+            <MenuItem value="">Select the Sheet</MenuItem>
+            {sheetList.map((spreadSheet, key) => (
+              <MenuItem key={key} value={spreadSheet.name}>
+                {spreadSheet.name}
+              </MenuItem>
+            ))}
 
-     </Select>
-</FormControl>} */}
+          </Select>
 
+        {/* </form>
+      </Box> */}
 
+  
+      {/* <Box sx={{ maxWidth: 150, display: 'inline', gap: 15, width: 150 }}>
+        <form > */}
+          <InputLabel id="select-tab-label">Tab</InputLabel>
+          <Select sx={{width:150}}
+            labelId="select-tab-label"
+            id="select-tab"
+            value={selectedTab}
+            label="Tab"
+            onChange={e=>handleChangeTab(e)}
+          >
+            <MenuItem value="">Select the Tab</MenuItem>
 
+            {tabs.map((selTab, key) => (
+              <MenuItem key={key} value={selTab}>
+                {selTab}
+              </MenuItem>
+            ))}
+         
+          </Select>
+        {/* </form>
+      </Box> */}
 
+  </div>
 
-
-
-    
-    {/* <p>{card}</p> */}
-     
-    <Box  sx={{maxWidth: 150,display: 'inline', gap: 15 ,width: 150}}>
-         <form>
-         <InputLabel id="demo-simple-select-label">Sheet</InputLabel>
-        <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
-          value={age}
-          label="Sheet"
-          onChange={handleChange}
-        >
-          {/* <MenuItem value={card.id}>{card.id}}</MenuItem> */}
-          <MenuItem value={20}>{card.name}</MenuItem>
-          {/* <MenuItem value={30}>{card.name}</MenuItem> */}
-        </Select>
-         </form>
-        </Box>
-
-        <Box  sx={{maxWidth: 150,display: 'inline', gap: 15 ,width: 150}}>
-         <form>
-         <InputLabel id="demo-simple-select-label">Tab</InputLabel>
-        <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
-          value={age}
-          label="Tab"
-          onChange={handleChange}
-        >
-          <MenuItem value={10}>{card.sheetNames[0]}</MenuItem>
-          <MenuItem value={20}>{card.sheetNames[1]}</MenuItem>
-          
-        </Select>
-         </form>
-         </Box>
-      
     </>
-    )
-    }
-
-    return<>
-    <Navbar />
-    {sheets.map(renderDropDown)}
-    </>
-    
+  )
 }
+
 export default Dashboard;

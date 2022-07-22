@@ -48,7 +48,7 @@ export const getAccessToken = async (req,res)=>{
         access_type: 'offline',
         scope: SCOPES
     });
-    console.log('Authorize this app by visiting this url:', authUrl);
+    console.log('url:', authUrl);
 
     return res.status(200).send(authUrl);
 
@@ -81,18 +81,34 @@ export const authenticateToken = async (req, res) => {
             .then((response) => {
                 
                 console.log('inside verify token')
-                const subscription = new Subscription({ userId: req.user.userId, email: response.payload.email, 
+                const email=response.payload.email;
+                const userId=req.user.userId;
+                Subscription.findOne({$and:[{email:email},{userId:userId}]}, function (data, err) {
+                 if (err) {    
+                 
+                //if email already subscribed
+                 console.log('email already subscribed')
+                 const response = { "Status": "Failure", "Reason": "Google Account already subscribed" }
+                 return res.status(400).redirect('http://localhost:3000/Subscriptions')
+                  }
+                else 
+                  {
+                    console.log('email not subscribed')
+                 const subscription = new Subscription({ userId: req.user.userId, email: response.payload.email, 
                                      tokenId: token });
 
                 subscription.save();
                 console.log("Authenticated user : ",response.payload.email);
-            
+                return res.redirect('http://localhost:3000/Subscriptions');
+                 }
+                })
+               
             })
             .catch((err)=>{console.log("Error verifying token",err)});
 
     });
 
-    return res.redirect('http://localhost:3000/Subscriptions');
+   
 
 }
 
