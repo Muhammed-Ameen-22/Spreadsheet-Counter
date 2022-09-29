@@ -1,7 +1,5 @@
 
-# Cliff.ai - Home Assignment 
-
-This is a repository to store the take home assignment of cliff.ai
+# SPREADSHEET COUNTER
 
 
 
